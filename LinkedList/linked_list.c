@@ -26,11 +26,16 @@ void ll_print(node_p selected)
   }
   else
   {
+    printf("%f", selected->data);
     if(selected->child != NULL)
     {
+      printf(" -> ");
       ll_print(selected->child);
     }
-    printf("%f\n", selected->data);
+    else
+    {
+      printf(" -|\n");
+    }
   }
 }
 
@@ -46,24 +51,31 @@ node_p ll_rev(node_p previous, node_p selected)
   return first;
 }
 
-node_p ll_rev_copy(node_p old, node_p new)
+node_p ll_rev_copy(node_p old)
 {
-  if(!selected->next)
+  node_p first = ll_add_front(NULL, old->data);
+  while(old->child)
   {
-
+    first = ll_add_front(first, old->child->data);
+    old = old->child;
   }
-  ll_rev_copy(selected->next);
-
+  return first;
+  /*ll_add_front()
+  node_p first = ll_rev_copy(selected->child, newrev);
+  */
 }
 
 void ll_free( node_p selected )
 {
-    if( !selected )
-    {
-    }
-    else
-    {
-        ll_free(selected->child);
-        free(selected);
-    }
+  if(!selected)
+  {
+  }
+  else
+  {
+    ll_free(selected->child);
+    free(selected);
+    /*printf("%f\n", selected->data);
+    printf("Freed");*/
+  }
+  selected = NULL;
 }
