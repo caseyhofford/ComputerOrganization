@@ -180,10 +180,11 @@ int bitAnd(int x, int y) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 6
  *   Rating: 2
+ Here I attempted to shift the binary number all the way to the left of the desired byte and then back to the right of the desired byte to trim it, this however does not always work because of the arithmetic right shift filling in different values
  */
 int getByte(int x, int n) {
-  x << 32-n*8+7;
-  x >> 32-n*8;
+  x = x >> (n<<3);
+  x = x & 0xff;
   return x;
 }
 /*
@@ -195,7 +196,13 @@ int getByte(int x, int n) {
  *   Rating: 3
  */
 int logicalShift(int x, int n) {
-  return 2;
+  x = x >> n;
+  int y = 1;
+  y = y << 31;
+  y = y >> n;
+  y = ~y;
+  int a = x|y;
+  return a;
 }
 /*
  * bitCount - returns count of number of 1's in word
@@ -222,6 +229,7 @@ int bang(int x) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 4
  *   Rating: 1
+ ****This should shift 0001 all the way to the 1 at the 32nd place, creating the minimum 2s complement value
  */
 int tmin(void) {
   x = 1 << 31;
@@ -235,12 +243,19 @@ int tmin(void) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 15
  *   Rating: 2
+ ****must n-1 because of twos complement (# of bits to store w/o sign), then remove the sign.
  */
 int fitsBits(int x, int n) {
-  x<<1;
-  x>>n+1;
-  x<<1;
-  ~x;
+  n = ~n;/*create n-1 in next 2 lines*/
+  n = n + 1;
+  n = ~n;
+  int signflip = 1 << 31;
+  x = ~x;
+  x = x|signflip;
+  x = ~x;
+  x >> n;
+  //here we need to somehow check if there are any 1s in the remaining number, how to do this in 6 ops though... IDK
+  return 2;
 }
 /*
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -249,9 +264,13 @@ int fitsBits(int x, int n) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 15
  *   Rating: 2
+ *** ?????
  */
 int divpwr2(int x, int n) {
-    return 2;
+    w = 1 << n + ~0;/*what does negating 0 accomplish?*/
+    m = x >> 31;/*creates a word full of 1s or 0s depending on sign*/
+    c = m & w;
+    return (x+c)>>n;
 }
 /*
  * negate - return -x
@@ -269,9 +288,16 @@ int negate(int x) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 8
  *   Rating: 3
+ ***shift 31 right to fill word w/ 1s or 0s by sign, negate for anti OR, create a series of 1s with a 0 in the final place and compare to negated x and then flip back to truth leaving 1 digit of sign in the first place
  */
 int isPositive(int x) {
-  return 2;
+  x = x>>31;
+  x = ~x;
+  int large = ~0;
+  large = large ^ 1;
+  x = x|large;
+  x = ~x;
+  return x;
 }
 /*
  * isLessOrEqual - if x <= y  then return 1, else return 0
@@ -279,9 +305,19 @@ int isPositive(int x) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 24
  *   Rating: 3
+ ***we want if(x-y<0) return 1
+ ****lets make y negative then add them then smear the sign across the word and cancel out all but the smallest digit much like in isPositive
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  y = ~y + 1;
+  int res = x+y;
+  res = res >> 31;
+  res = ~res;
+  int large = ~0;
+  large = large ^ 1;
+  res = res|large;
+  res = ~res;
+  return res;
 }
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
@@ -305,7 +341,9 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
- return 2;
+  int flip = 1<<31;
+  uf = flip ^ uf;
+  return uf;
 }
 /*
  * float_i2f - Return bit-level equivalent of expression (float) x
@@ -317,6 +355,27 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
+  int s = x;
+  s = s>>31;
+  s = ~s;
+  int large = ~0;
+  large = large ^ 1;
+  s = s|large;
+  s = ~s;
+  int e = x;
+  e = e >> 23;
+  e = e & 0xff;
+  x = ~x;
+  int mask = s << 31;
+  mask = mask + (e << 23);
+  x = x|mask;
+  x = ~x;
+  x = x + (1 << 23);
+  int f = (~127) + 1;
+  e = f + e;
+  int multi = 1 << e;
+  int divi = 1 << 23;
+  int out = multi*x/divi;
   return 2;
 }
 /*
