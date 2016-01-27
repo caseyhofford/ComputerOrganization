@@ -1,0 +1,28 @@
+beginning of getbuf = 0x55629f30
+  points right after call to getbuf
+
+start of touch1() = 0x401917
+
+touch2:
+
+48 83 ec 08
+89 fa
+c7 05 c9 2b 20 00 02
+00 00 00
+3b 3d cb 2b 20 00
+75 20
+be 20 32 40 00
+bf 01 00 00 00
+b8 00 00 00 00
+e8 b1 f4 ff ff
+bf 02 00 00 00
+e8 6d 04 00 00
+eb 1e
+be 48 32 40 00
+bf 01 00 00 00
+b8 00 00 00 00
+e8 91 f4 ff ff
+bf 02 00 00 00
+e8 0f 05 00 00
+bf 00 00 00 00
+e8 cd f4 ff ff

@@ -1,0 +1,12 @@
+#ifndef LL_H
+#define LL_H
+
+header file contents
+
+#endif
+
+ensures that a header file possibly referred to by two other headers is not included twice
+definition is generally the files name in all caps, preceded by two underscores when in system or standard Library
+
+compiler
+gcc -Wall (gives all errors and warnings) -Werr (treats any warning as an error and doesn't produce output) -g (tells compiler to put line numbers into the compiled program, provides info in valgrind)

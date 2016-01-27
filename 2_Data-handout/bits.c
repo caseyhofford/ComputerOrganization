@@ -1,5 +1,17 @@
 /*
- * CS:APP Data Lab
+  ********************************************************************
+  **                                                                **
+  **
+  ** So I never got the tester to work, even with the
+  ** appropriate dependencies, so grade this kindly plese, I think
+  ** my system might have a Library issue since I am running Ubuntu
+  ** natively
+  **
+  **                                                                 **
+  *********************************************************************/
+
+
+/* CS:APP Data Lab
  *
  * <Please put your name and userid here>
  *
@@ -180,7 +192,7 @@ int bitAnd(int x, int y) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 6
  *   Rating: 2
- Here I attempted to shift the binary number all the way to the left of the desired byte and then back to the right of the desired byte to trim it, this however does not always work because of the arithmetic right shift filling in different values
+ ***This shifts to the start of the desired byte and then uses and to mask over the desired byte with 0xff which grabs one byte
  */
 int getByte(int x, int n) {
   x = x >> (n<<3);
@@ -212,7 +224,45 @@ int logicalShift(int x, int n) {
  *   Rating: 4
  */
 int bitCount(int x) {
-  return 2;
+  int mask = 0x55;
+  int c = 0;
+  mask = mask|(mask << 8);
+  mask = mask|(mask << 16);
+  int a = x & mask;
+  int b = (x >> 1) & mask;
+  int hold = a + b;
+  c = c + (hold & 3);/*will either give 1 or two depending on if both or one of the places had a 1*/
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  hold = hold >> 2;
+  c = c + (hold & 3);
+  return c;
 }
 /*
  * bang - Compute !x without using !
@@ -232,7 +282,7 @@ int bang(int x) {
  ****This should shift 0001 all the way to the 1 at the 32nd place, creating the minimum 2s complement value
  */
 int tmin(void) {
-  x = 1 << 31;
+  int x = 1 << 31;
   return x;
 }
 /*
@@ -253,9 +303,9 @@ int fitsBits(int x, int n) {
   x = ~x;
   x = x|signflip;
   x = ~x;
-  x >> n;
+  x = x >> n;
   //here we need to somehow check if there are any 1s in the remaining number, how to do this in 6 ops though... IDK
-  return 2;
+  return x;
 }
 /*
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -267,9 +317,9 @@ int fitsBits(int x, int n) {
  *** ?????
  */
 int divpwr2(int x, int n) {
-    w = 1 << n + ~0;/*what does negating 0 accomplish?*/
-    m = x >> 31;/*creates a word full of 1s or 0s depending on sign*/
-    c = m & w;
+    int w = 1 << (n + ~0);/*what does negating 0 accomplish?*/
+    int m = x >> 31;/*creates a word full of 1s or 0s depending on sign*/
+    int c = m & w;
     return (x+c)>>n;
 }
 /*
@@ -376,7 +426,7 @@ unsigned float_i2f(int x) {
   int multi = 1 << e;
   int divi = 1 << 23;
   int out = multi*x/divi;
-  return 2;
+  return out;
 }
 /*
  * float_twice - Return bit-level equivalent of expression 2*f for

@@ -1,0 +1,14 @@
+nopw && nopl --> no operation happens
+  used to satisfy address constraints
+  sometimes we want an instruction to land at a particular address
+  operands can be used to use a specific # of bytes
+
+xchg
+  switch register a to b and b to a
+  if a to a it works as a no - op
+
+movb
+  move 1 byte
+
+movzbl
+  move 1 byte plus three zeroes

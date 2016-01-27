@@ -1,0 +1,30 @@
+registers ~100 bytes
+--accessed in nanoseconds (~1 clock tick)
+
+ram (GB)
+--accessed in dozens nanoseconds
+
+spinning disks (TB)
+--10,000 RPM (1 mill instructions per rotation)
+
+2^8 characters in a byte
+
+2^10 ~ 10^3
+2^32 ~ 2^2 * 10^9
+
+
+C
+
+typedef struct tree_s tree_t, *tree_p;
+
+struct tree_s{
+  tree_p left, right;
+  float data;
+};
+
+* means pointer
+
+pointers are not always used, when a variable of a struct is created it contains the actual data, not a pointer
+functions and process'
+
+& followed by variable sends a reference, not the data

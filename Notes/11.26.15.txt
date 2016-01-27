@@ -1,0 +1,14 @@
+rip is pointing to the call
+the step after the call is moved to the stack
+the stack pointer rsp is moved down one step
+rip is set to the function being called
+the function being called runs
+rsp needs to be where it was before when ret is called or ELSE!
+ret
+  look at rsp +8
+  take the address stored there and treat it as an address to a command which should be executed
+
+local variables are all stored in the stack
+malloc'd items are stored in the heap
+constants are stored at the bottom of memory
+6 parameters can be stored in registers afterwards they are stored in memory

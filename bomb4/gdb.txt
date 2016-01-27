@@ -1,0 +1,98 @@
+0x0000000000401627 in read_six_numbers ()
+0x7fffffffdec0:	0x0
+0x000000000040162a in read_six_numbers ()
+0x7fffffffdec0:	0x0
+0x000000000040162e in read_six_numbers ()
+0x7fffffffdec0:	0x0
+Dump of assembler code for function read_six_numbers:
+   0x0000000000401623 <+0>:	sub    $0x18,%rsp
+   0x0000000000401627 <+4>:	mov    %rsi,%rdx
+   0x000000000040162a <+7>:	lea    0x4(%rsi),%rcx
+=> 0x000000000040162e <+11>:	lea    0x14(%rsi),%rax
+   0x0000000000401632 <+15>:	mov    %rax,0x8(%rsp)
+   0x0000000000401637 <+20>:	lea    0x10(%rsi),%rax
+   0x000000000040163b <+24>:	mov    %rax,(%rsp)
+   0x000000000040163f <+28>:	lea    0xc(%rsi),%r9
+   0x0000000000401643 <+32>:	lea    0x8(%rsi),%r8
+   0x0000000000401647 <+36>:	mov    $0x4028e9,%esi
+   0x000000000040164c <+41>:	mov    $0x0,%eax
+   0x0000000000401651 <+46>:	callq  0x400c70 <__isoc99_sscanf@plt>
+   0x0000000000401656 <+51>:	cmp    $0x5,%eax
+   0x0000000000401659 <+54>:	jg     0x401660 <read_six_numbers+61>
+   0x000000000040165b <+56>:	callq  0x4015ed <explode_bomb>
+   0x0000000000401660 <+61>:	add    $0x18,%rsp
+   0x0000000000401664 <+65>:	retq   
+End of assembler dump.
+Value can't be converted to integer.
+Value can't be converted to integer.
+Single stepping until exit from function read_six_numbers,
+which has no line number information.
+
+Breakpoint 2, 0x00000000004015ed in explode_bomb ()
+0x7fffffffde98:	"`\026@"
+0x66:	<error: Cannot access memory at address 0x66>
+0x604810 <input_strings+80>:	"fasd"
+Dump of assembler code for function explode_bomb:
+=> 0x00000000004015ed <+0>:	sub    $0x8,%rsp
+   0x00000000004015f1 <+4>:	mov    $0x4028c9,%edi
+   0x00000000004015f6 <+9>:	callq  0x400b80 <puts@plt>
+   0x00000000004015fb <+14>:	mov    $0x4028d2,%edi
+   0x0000000000401600 <+19>:	callq  0x400b80 <puts@plt>
+   0x0000000000401605 <+24>:	mov    $0x0,%edi
+   0x000000000040160a <+29>:	callq  0x4014e1 <send_msg>
+   0x000000000040160f <+34>:	mov    $0x402778,%edi
+   0x0000000000401614 <+39>:	callq  0x400b80 <puts@plt>
+   0x0000000000401619 <+44>:	mov    $0x8,%edi
+   0x000000000040161e <+49>:	callq  0x400cb0 <exit@plt>
+End of assembler dump.
+The program being debugged has been started already.
+Start it from the beginning? (y or n) Starting program: /home/casey/CompOrg/bomb4/bomb 
+
+Program received signal SIGINT, Interrupt.
+0x00007ffff7b00810 in __read_nocancel () at ../sysdeps/unix/syscall-template.S:81
+81	../sysdeps/unix/syscall-template.S: No such file or directory.
+The program being debugged has been started already.
+Start it from the beginning? (y or n) Starting program: /home/casey/CompOrg/bomb4/bomb ./disarm.txt
+
+Breakpoint 1, 0x0000000000400f6c in phase_2 ()
+Dump of assembler code for function phase_2:
+=> 0x0000000000400f6c <+0>:	push   %rbp
+   0x0000000000400f6d <+1>:	push   %rbx
+   0x0000000000400f6e <+2>:	sub    $0x28,%rsp
+   0x0000000000400f72 <+6>:	mov    %rsp,%rsi
+   0x0000000000400f75 <+9>:	callq  0x401623 <read_six_numbers>
+   0x0000000000400f7a <+14>:	cmpl   $0x1,(%rsp)
+   0x0000000000400f7e <+18>:	je     0x400fa0 <phase_2+52>
+   0x0000000000400f80 <+20>:	callq  0x4015ed <explode_bomb>
+   0x0000000000400f85 <+25>:	jmp    0x400fa0 <phase_2+52>
+   0x0000000000400f87 <+27>:	mov    -0x4(%rbx),%eax
+   0x0000000000400f8a <+30>:	add    %eax,%eax
+   0x0000000000400f8c <+32>:	cmp    %eax,(%rbx)
+   0x0000000000400f8e <+34>:	je     0x400f95 <phase_2+41>
+   0x0000000000400f90 <+36>:	callq  0x4015ed <explode_bomb>
+   0x0000000000400f95 <+41>:	add    $0x4,%rbx
+   0x0000000000400f99 <+45>:	cmp    %rbp,%rbx
+   0x0000000000400f9c <+48>:	jne    0x400f87 <phase_2+27>
+   0x0000000000400f9e <+50>:	jmp    0x400fac <phase_2+64>
+   0x0000000000400fa0 <+52>:	lea    0x4(%rsp),%rbx
+   0x0000000000400fa5 <+57>:	lea    0x18(%rsp),%rbp
+   0x0000000000400faa <+62>:	jmp    0x400f87 <phase_2+27>
+   0x0000000000400fac <+64>:	add    $0x28,%rsp
+   0x0000000000400fb0 <+68>:	pop    %rbx
+   0x0000000000400fb1 <+69>:	pop    %rbp
+   0x0000000000400fb2 <+70>:	retq   
+End of assembler dump.
+0x0:	Cannot access memory at address 0x0
+0x0:	<error: Cannot access memory at address 0x0>
+0x0000000000400f6d in phase_2 ()
+0x0000000000400f6e in phase_2 ()
+0x0000000000400f72 in phase_2 ()
+Single stepping until exit from function phase_2,
+which has no line number information.
+
+Breakpoint 2, 0x00000000004015ed in explode_bomb ()
+A debugging session is active.
+
+	Inferior 1 [process 30989] will be killed.
+
+Quit anyway? (y or n) 
