@@ -1,0 +1,5 @@
+for( i = 0; i< dim; i += K)
+  for(j by K)
+    for( ii = 0; ii<K; ii++)
+      for( jj = 0; jj < K; jj++)
+        /*code*/
