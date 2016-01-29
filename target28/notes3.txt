@@ -1,0 +1,14 @@
+cookie
+  0x70206b77
+
+ascii cookie
+  37 30 32 30 36 62 37 37
+
+touch 3
+  0x0000000000401a38
+
+addr at getbuf call
+  0x0000000000401aaf
+
+start of string
+  0x5561acd0

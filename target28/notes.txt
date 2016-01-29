@@ -1,0 +1,11 @@
+addr of buf = 0x5561abc8
+
+touch1 = 0x00000000004018fe
+
+addr of touch2 = 0x000000000040192a
+
+cookie = 0x70206b77
+
+instructions
+0:	8b 3c 25 77 6b 20 70 	mov    0x70206b77,%edi
+7:	c3                   	retq
