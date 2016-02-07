@@ -2,6 +2,16 @@
  * Kernels to be optimized for the CS:APP Performance Lab
  ********************************************************/
 
+ /********************************************************
+ ********************************************************
+  * I had library issues again :( driver.c wouldn't compile in
+  either of two ubuntu installations with GCC reinstalled many
+  times. I didn't get to test this but in theory I am using the
+  spatial locality concept to speed the program by doing blocks
+  32*32 at a time.
+  ********************************************************
+  ********************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "defs.h"
@@ -33,11 +43,18 @@ team_t team = {
 char naive_rotate_descr[] = "naive_rotate: Naive baseline implementation";
 void naive_rotate(int dim, pixel *src, pixel *dst)
 {
-    int i, j;
-
-    for (i = 0; i < dim; i++)
-	for (j = 0; j < dim; j++)
-	    dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+    int sub_dim = dim/32;
+    int x, i, j;
+    for(x=0; x < 32; x++)
+    {
+      for (i = 0; i < (sub_dim*x); i++)
+      {
+        for (j = 0; j < (sub_dim*x); j++)
+        {
+          dst[RIDX(dim-1-j, i, dim)] = src[RIDX(i, j, dim)];
+        }
+      }
+    }
 }
 
 /*
