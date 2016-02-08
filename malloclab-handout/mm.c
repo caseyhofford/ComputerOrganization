@@ -99,49 +99,42 @@ static void remove_node(void *bp)
 
 static void *coalesce(void *bp)
 {
-  size_t prev_alloc = GET_ALLOC(FTRP(PREV_BLKP(bp)));
+  size_t prev_alloc = GET_ALLOC((((char *)(bp) - DSIZE)));
   size_t next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
   size_t size = GET_SIZE(HDRP(bp));
   //printf("p: %d, n: %d, sz: %d\n",prev_alloc,next_alloc,size );
 
-    /* Case 1 */
   if (prev_alloc && next_alloc)
   {
     //printf("case 1\n");
-    /*PUT(bp, (unsigned int)free_start);there is no previous for the first member of the list
-    PUT((free_start + WSIZE), (unsigned int)bp);
-    free_start = bp;*/
     return bp;
   }
 
-    /* Case 2 */
   else if (prev_alloc && !next_alloc)
   {
-    //printf("case 2\n");
-    remove_node(NEXT_BLKP(bp));
-    size += GET_SIZE(HDRP(NEXT_BLKP(bp))) + DSIZE;
+    //printf("case 2: %u\n", (unsigned int)NEXT_BLKP(bp));
+    remove_node(bp + GET_SIZE(HDRP(bp)));
+    size += GET_SIZE(HDRP(NEXT_BLKP(bp)));
     PUT(HDRP(bp), PACK(size, 0));
     PUT(FTRP(bp), PACK(size, 0));
   }
 
-  /* Case 3 */
   else if (!prev_alloc && next_alloc)
   {
     //printf("case 3\n");
     remove_node(bp);
-    size += GET_SIZE(HDRP(PREV_BLKP(bp))) + DSIZE;
+    size += GET_SIZE(HDRP(PREV_BLKP(bp)));
     PUT(FTRP(bp), PACK(size, 0));
     PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
     bp = PREV_BLKP(bp);
   }
 
-    /* Case 4 */
   else
   {
     //printf("case 4\n");
     remove_node(NEXT_BLKP(bp));
     remove_node(bp);
-    size += GET_SIZE(HDRP(PREV_BLKP(bp))) + GET_SIZE(FTRP(NEXT_BLKP(bp))) + 2*DSIZE;
+    size += GET_SIZE(HDRP(PREV_BLKP(bp))) + GET_SIZE(FTRP(NEXT_BLKP(bp)));
     PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
     PUT(FTRP(NEXT_BLKP(bp)), PACK(size, 0));
     bp = PREV_BLKP(bp);
@@ -175,9 +168,15 @@ static void *extend_heap(size_t words)
   //printf("Line 165: %u\n", (unsigned int)(bp));
   PUT(free_start, (unsigned int)(bp));
   //epihead = HDRP(NEXT_BLKP(bp));
-  //void *blockStart = coalesce(bp);
-  //return blockStart;
-  return bp;
+  if(GET(NEXT_BLKP(bp)) != 0 && GET(PREV_BLKP(bp)) != 0)
+  {
+    void *blockStart = coalesce(bp);
+    return blockStart;
+  }
+  else
+  {
+    return bp;
+  }
 }
 
 
@@ -316,7 +315,10 @@ void mm_free(void *bp)
   PUT((char *)(GET(free_start))+WSIZE, (unsigned int)(bp));
   PUT((char *)(bp) + WSIZE, 0);
   PUT(free_start, (unsigned int)bp);
-  //coalesce(bp);
+  if(GET(NEXT_BLKP(bp)) != 0 && GET(PREV_BLKP(bp)) != 0)
+  {
+    coalesce(bp);
+  }
 }
 
 /*
